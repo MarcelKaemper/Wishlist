@@ -1,10 +1,30 @@
-﻿@{
+﻿@model wishlist.Models.Home
+@{
     ViewBag.Title = "Home Page";
 }
 
 <div class="row">
     <div class="col">
         <h2>Wishlist</h2>
+        <table>
+            <tr>
+                <th>name</th>
+                <th>url</th>
+                <th>comment</th>
+                <th>added_on</th>
+            </tr>
+            @foreach (var row in Model.data)
+            {
+        <tr>
+            @foreach (var x in row)
+            {
 
+                <td>@x</td>
+
+
+            }
+        </tr>
+            }
+        </table>
     </div>
 </div>
