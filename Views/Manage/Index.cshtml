@@ -1,9 +1,19 @@
-﻿@{
+﻿@model wishlist.Models.Manage
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Manage</h2>
-<input type="text" name="name" placeholder="name" />
-<input type="text" name="comment" placeholder="comment" />
-<input type="text" name="url" placeholder="url" />
+<form method="post">
+    <input type="text" name="name" placeholder="name" />
+    <input type="text" name="comment" placeholder="comment" />
+    <input type="text" name="url" placeholder="url" />
+    <input type="submit" value="Add" />
+</form>
+@if (!string.IsNullOrEmpty(Model.error))
+{
+    <div class="error">
+        Error: @Model.error
+    </div>
+}
