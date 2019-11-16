@@ -6,12 +6,12 @@
 <div class="row">
     <div class="col">
         <h2>Wishlist</h2>
-        <table>
+        <table class="table table-bordered">
             <tr>
-                <th>name</th>
-                <th>comment</th>
-                <th>url</th>
-                <th>added_on</th>
+                <th scope="col">Name</th>
+                <th scope="col">Comment</th>
+                <th scope="col">URL</th>
+                <th scope="col">Added on</th>
             </tr>
             @foreach (var row in Model.data)
             {
