@@ -1,0 +1,6 @@
+appsettings*
+bin/
+obj/
+Properties
+wwwroot/lib
+*csproj*
