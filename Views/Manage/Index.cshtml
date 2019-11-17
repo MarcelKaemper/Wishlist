@@ -1,13 +1,22 @@
-﻿@{
+﻿@model wishlist_core.Models.ManageModel
+@{
     ViewData["Title"] = "Manage Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Manage</h1>
-    <form method="post">
-        <input type="text" name="name" placeholder="Name" />
-        <input type="url" name="url" placeholder="URL" />
-        <input type="text" name="comment" placeholder="Comment" />
-        <input type="submit" value="Add" />
-    </form>
-</div>
+    <div class="text-center">
+        <h1 class="display-4">Manage</h1>
+
+        @using (@Html.BeginForm("AddElement", "Manage", FormMethod.Post))
+        {
+            @Html.TextBoxFor(Manage => Manage.name, "", new { placeholder = "Name" })
+            @Html.TextBoxFor(Manage => Manage.url, "", new { placeholder = "URL" })
+            @Html.TextBoxFor(Manage => Manage.comment, "", new { placeholder = "Comment" })
+            <input type="submit" value="Add" />
+        }
+
+
+        @if (!string.IsNullOrEmpty(Model.values))
+        {
+            <p>@Model.values</p>
+        }
+    </div>
