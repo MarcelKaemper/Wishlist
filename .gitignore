@@ -4,3 +4,4 @@ obj/
 Properties
 wwwroot/lib
 *csproj*
+.net_framework/
