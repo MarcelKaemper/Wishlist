@@ -7,46 +7,83 @@ using wishlist_core.Models;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using wishlist_core.Helpers;
 
 namespace wishlist_core.Controllers
 {
     public class ManageController : Controller
     {
-        private IConfiguration configuration;
+        private string error = "";
 
-        public ManageController(IConfiguration config)
-        {
-            configuration = config;
-        }
+        public DBHandler dbh = new DBHandler();
+        private DataGetter dg = new DataGetter();
 
         [HttpGet]
         public IActionResult Index()
         {
-            return View(new ManageModel());
+            return View(new ManageModel() { data = dg.getData() });
         }
 
         [HttpPost]
         public IActionResult AddElement(ManageModel m)
         {
-            string error = "None";
             try
             {
-                MySqlConnection con = new MySqlConnection();
-                con.ConnectionString = configuration.GetConnectionString("DefaultConnection");
-                con.Open();
+                dbh.openConnection();
 
                 MySqlCommand cmd = new MySqlCommand();
-                cmd.Connection = con;
+                cmd.Connection = dbh.con;
                 string sql = "INSERT INTO data (name, url, comment) VALUES ('{0}', '{1}', '{2}');";
                 cmd.CommandText = string.Format(sql, m.name, m.url, m.comment);
                 cmd.ExecuteNonQuery();
 
-                con.Close();
+                dbh.closeConnection();
             } catch(Exception e)
             {
-                error = e.ToString();
+                error = e.Message;
             }
-            return View("Index", new ManageModel() { values = error});
+
+            if (string.IsNullOrEmpty(error))
+            {
+                return Redirect("/Manage");
+            }else
+            {
+                return View("Index", new ManageModel() { error = error, data=dg.getData()});
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ChangeElement(ManageModel m)
+        {
+            if (!string.IsNullOrEmpty(m.delete))
+            {
+                //Delete
+                dbh.openConnection();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = dbh.con;
+                string sql = string.Format("DELETE FROM data WHERE id='{0}'", m.ID);
+                cmd.CommandText = sql;
+                cmd.ExecuteNonQuery();
+
+                dbh.closeConnection();
+
+            }
+            else
+            {
+                //Save
+                dbh.openConnection();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = dbh.con;
+                string sql = string.Format("UPDATE data SET name='{0}', comment='{1}', url='{2}' where id='{3}'", m.name, m.comment, m.url, m.ID);
+                cmd.CommandText = sql;
+                cmd.ExecuteNonQuery();
+
+                dbh.closeConnection();
+            }
+            //return View("Index", new ManageModel() { data=dg.getData()});
+            return Redirect("/Manage");
         }
     }
 }

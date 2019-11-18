@@ -11,15 +11,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Configuration;
 using wishlist_core.Controllers;
+using wishlist_core.Helpers;
 
 namespace wishlist_core
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
 
             Configuration = configuration;
+
+            Storage.connectionString = configuration.GetConnectionString("DefaultConnection");
+            //st.setConnectionString(configuration.GetConnectionString("DefaultConnection").ToString());
         }
 
         public IConfiguration Configuration { get; }
